@@ -1,0 +1,74 @@
+export const projects = [
+  {
+    title: 'OPA - DASHBOARD',
+    image: 'images/web/opa.png',
+    description:
+      'A geospatial agricultural dashboard for the Office of Provincial Agriculture of Pampanga, built as a proof of concept.',
+    tools: ['figma', 'php', 'bootstrap', 'map-gl', 'turf', 'chart-js'],
+    source: 'https://github.com/InterfaceAlchemist/OPA-Dashboard.git',
+    demo: '#',
+    caseStudy: '#',
+    loose: true,
+    titleClass: 'lg:text-[1.26rem]',
+  },
+  {
+    title: 'FAB - DASHBOARD',
+    image: 'images/web/fab.png',
+    description:
+      'A geospatial dashboard for BCDA (Bases Conversion and Development Authority) built as a frontend project.',
+    tools: ['figma', 'vue', 'vite', 'map-gl', 'tailwind'],
+    source: 'https://github.com/InterfaceAlchemist/FAB-Dashboard.git',
+    demo: '#',
+    caseStudy: '#',
+    loose: true,
+    titleClass: 'lg:text-[1.26rem]',
+  },
+  {
+    title: 'CodeRush',
+    image: 'images/web/coderush.png',
+    description:
+      'A developer-focused typing speed test – type real JavaScript, PHP, and SQL snippets with syntax highlighting, not just prose.',
+    tools: ['vue', 'vite', 'tailwind', 'js'],
+    source: 'https://github.com/InterfaceAlchemist/CodeRush.git',
+    demo: 'https://coderush-snowy.vercel.app/',
+    caseStudy: '#',
+    loose: true,
+    titleClass: 'lg:text-[1.502rem]',
+  },
+  {
+    title: 'RRCY - Management & Scheduling System',
+    image: 'images/web/rrcy.png',
+    description:
+      'Web portal for the DSWD-RRCY (Ayala Magalang Pampanga). Visitor accounts, visitation scheduling, and an admin system for juvenile, staff and inventory management.',
+    tools: ['ps', 'figma'],
+    source: '',
+    demo: '',
+    caseStudy: '#',
+    loose: false,
+    titleClass: 'lg:text-[1.357rem]',
+  },
+  {
+    title: 'Bangketa Eskwela Foundation - Web App',
+    image: 'images/web/bangketa.png',
+    description:
+      'Responsive website and admin dashboard for the Bangketa Eskwela Foundation. Volunteer registration, donation guidance, announcements, and a full admin back-office.',
+    tools: ['ps', 'figma'],
+    source: '',
+    demo: '',
+    caseStudy: '#',
+    loose: false,
+    titleClass: 'lg:text-[1.357rem]',
+  },
+  {
+    title: 'FigurineZ',
+    image: 'images/web/figurinez.png',
+    description:
+      'Collectible figure marketplace for buying, trading and selling. Secure sign-up, collection browsing, trade requests, seller tools and bidding.',
+    tools: ['ps', 'figma'],
+    source: '',
+    demo: '',
+    caseStudy: '#',
+    loose: false,
+    titleClass: 'lg:text-[1.357rem]',
+  },
+]

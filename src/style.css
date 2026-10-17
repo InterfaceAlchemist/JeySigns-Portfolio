@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Fonts (files live in /public/fonts) ---------- */
+@font-face {
+  font-family: 'Intel One Mono';
+  src: url('/fonts/IntelOneMono-Variable.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Intel One Mono';
+  src: url('/fonts/IntelOneMono-Italic-Variable.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Caveat';
+  src: url('/fonts/Caveat-Variable.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Lexend Zetta';
+  src: url('/fonts/LexendZetta-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Base ----------
+   Below 1024px the root stays at 16px (mobile / tablet layouts use normal sizes).
+   From 1024px up the whole layout scales with the viewport, so the page matches
+   the 1440px Figma frame at 1440 and grows/shrinks proportionally around it. */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+@media (min-width: 1024px) {
+  html {
+    font-size: clamp(13px, 1.111vw, 24px);
+  }
+}
+body {
+  @apply bg-white font-sans text-ink antialiased;
+  overflow-x: hidden;
+}
+body.is-locked {
+  overflow: hidden;
+}
+img {
+  @apply block max-w-full;
+}
+::selection {
+  background: #ff5900;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Shared layout helpers ---------- */
+@layer components {
+  /* Content column: 82.2% of a 1440 frame (≈1184px), centred */
+  .wrap {
+    width: min(82.2%, 74rem);
+    margin-inline: auto;
+  }
+  @media (max-width: 1023px) {
+    .wrap {
+      width: calc(100% - 3rem);
+    }
+  }
+  @media (max-width: 639px) {
+    .wrap {
+      width: calc(100% - 2rem);
+    }
+  }
+}
+
+/* Scroll reveal (see v-reveal in src/directives) */
+.reveal {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
