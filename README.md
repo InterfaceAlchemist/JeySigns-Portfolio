@@ -2,7 +2,7 @@
 
 Personal portfolio of **Jeremy Macaspac (JeySigns)**, a creative developer and designer from the Philippines. It covers frontend development, UI/UX, graphic design and logo design.
 
-**Live site:** [your-vercel-link.vercel.app]
+**Live site:** [jeysigns.vercel.app](https://jeysigns.vercel.app/)
 
 ![Portfolio preview](./public/preview.png)
 
