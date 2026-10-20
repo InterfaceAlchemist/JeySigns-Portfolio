@@ -8,18 +8,23 @@ Personal portfolio of **Jeremy Macaspac (JeySigns)**, a creative developer and d
 
 ## Features
 
-- Splash screen with the JEYSIGNS wordmark
+- Splash screen with the JEYSIGNS wordmark (shown once per browser session)
+- "Enter the portfolio" screen that starts the background music, with a "continue without sound" option
+- Floating music player with a spinning disc, equalizer bars and play/pause
+- Sticky navigation bar with section highlighting and a back-to-top button
 - Responsive layout for desktop, tablet and mobile
 - Web development projects with tools used and links
 - Graphic design showcase: social media posts, a poster gallery, shirt designs and a logo gallery
-- Poster lightbox with a hover preview, a blur-to-sharp full-quality PNG, keyboard navigation and a download button
+- Click-to-view lightbox for posters and social posts, with a hover preview, a blur-to-sharp full-quality PNG, keyboard navigation and a download button
 - Downloadable CV
+- Visitor analytics with Vercel Web Analytics
 
 ## Tech stack
 
 - [Vue 3](https://vuejs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Vite](https://vitejs.dev/)
+- YouTube IFrame API (background music)
 - Fonts: Intel One Mono, Caveat, Lexend Zetta
 - Hosted on Vercel
 
@@ -43,9 +48,14 @@ npm run preview
 
 ```
 src/
-  App.vue                     page order
+  App.vue                     page order and the splash / enter-screen flow
+  composables/
+    useMusic.js               background music (YouTube player, fades, pause on hidden tab)
   components/                 one component per section
     FlashScreen.vue
+    SoundGate.vue             "Enter the portfolio" screen
+    MusicPlayer.vue           floating player
+    SiteNav.vue               sticky nav and back-to-top
     HeroSection.vue
     ServicesSection.vue
     WebProjectsSection.vue
@@ -56,12 +66,17 @@ src/
     ExperienceSection.vue
     ContactSection.vue
     PosterLightbox.vue
-    ui/                       shared pieces (icons, marquee, labels)
+    ui/                       shared pieces (icons, marquee, labels, hover overlay)
   data/                       text, links and image paths
 public/                       images, fonts and CV
 ```
 
-To update content, edit the files in `src/data/`. You don't need to touch the components.
+## Customizing
+
+- **Content:** edit the files in `src/data/`. You don't need to touch the components.
+- **Project links:** set `source`, `demo` and `caseStudy` in `src/data/projects.js`. Add `demoUpdating: true` or `caseStudyUpdating: true` to show an "Updating…" button.
+- **Music:** change `VIDEO_ID` at the top of `src/composables/useMusic.js` to the ID of any YouTube video that allows embedding.
+- **Full-quality images:** each poster and social post has a small `.webp` for the page and a `.png` with the same lowercase name next to it, used by the lightbox. File names are case sensitive on the hosting server.
 
 ## Contact
 
