@@ -76,29 +76,99 @@ const iconPaths = computed(() =>
         >
           <AppIcon name="github" class="h-5 w-5" /> Source Code
         </a>
-        <a
-          v-if="project.demo"
-          :href="project.demo"
-          target="_blank"
-          rel="noopener"
-          class="inline-flex h-10 items-center gap-2.5 rounded-md border border-[#b46cc9] px-4 text-[0.9rem] text-[#c98ae0] transition hover:bg-[#b46cc9]/15 lg:h-[2.55rem] lg:px-[1.1rem] lg:text-[1.008rem]"
+
+        <!-- Live Demo (or "Updating…") -->
+        <component
+          :is="project.demoUpdating ? 'span' : 'a'"
+          v-if="project.demo || project.demoUpdating"
+          :href="project.demoUpdating ? undefined : project.demo"
+          :target="project.demoUpdating ? undefined : '_blank'"
+          :rel="project.demoUpdating ? undefined : 'noopener'"
+          :aria-disabled="project.demoUpdating || undefined"
+          :title="
+            project.demoUpdating
+              ? 'This demo is currently being updated'
+              : undefined
+          "
+          class="inline-flex h-10 items-center gap-2.5 rounded-md border border-[#b46cc9] px-4 text-[0.9rem] text-[#c98ae0] transition lg:h-[2.55rem] lg:px-[1.1rem] lg:text-[1.008rem]"
+          :class="
+            project.demoUpdating
+              ? 'cursor-not-allowed border-dashed opacity-60'
+              : 'hover:bg-[#b46cc9]/15'
+          "
         >
-          Live Demo <AppIcon name="external" class="h-[1.05rem] w-[1.05rem]" />
-        </a>
-        <a
-          :href="project.caseStudy"
-          class="ml-auto inline-flex items-center gap-2 text-[0.9rem] text-[#f1674f] transition hover:text-[#ff8a74] lg:text-[1.008rem]"
+          <template v-if="project.demoUpdating">
+            <span
+              class="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent motion-reduce:animate-none"
+            ></span>
+            Updating…
+          </template>
+          <template v-else>
+            Live Demo
+            <AppIcon name="external" class="h-[1.05rem] w-[1.05rem]" />
+          </template>
+        </component>
+
+        <!-- Case Study (or "Updating…") -->
+        <component
+          :is="project.caseStudyUpdating ? 'span' : 'a'"
+          :href="project.caseStudyUpdating ? undefined : project.caseStudy"
+          :aria-disabled="project.caseStudyUpdating || undefined"
+          :title="
+            project.caseStudyUpdating
+              ? 'This case study is currently being updated'
+              : undefined
+          "
+          class="ml-auto inline-flex items-center gap-2 text-[0.9rem] text-[#f1674f] transition lg:text-[1.008rem]"
+          :class="
+            project.caseStudyUpdating
+              ? 'cursor-not-allowed opacity-60'
+              : 'hover:text-[#ff8a74]'
+          "
         >
-          Case Study <AppIcon name="case" class="h-[1.05rem] w-[1.05rem]" />
-        </a>
+          <template v-if="project.caseStudyUpdating">
+            <span
+              class="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent motion-reduce:animate-none"
+            ></span>
+            Updating…
+          </template>
+          <template v-else>
+            Case Study
+            <AppIcon name="case" class="h-[1.05rem] w-[1.05rem]" />
+          </template>
+        </component>
       </template>
+
       <template v-else>
-        <a
-          :href="project.caseStudy"
-          class="inline-flex h-10 items-center gap-2.5 rounded-md border border-[#f58b78]/60 bg-gradient-to-b from-[#f1674f] to-[#9e3927] px-4 text-[0.9rem] text-white transition hover:brightness-110 lg:h-[2.55rem] lg:px-[1.5rem] lg:text-[1.008rem]"
+        <!-- Case Study filled button (or "Updating…") -->
+        <component
+          :is="project.caseStudyUpdating ? 'span' : 'a'"
+          :href="project.caseStudyUpdating ? undefined : project.caseStudy"
+          :aria-disabled="project.caseStudyUpdating || undefined"
+          :title="
+            project.caseStudyUpdating
+              ? 'This case study is currently being updated'
+              : undefined
+          "
+          class="inline-flex h-10 items-center gap-2.5 rounded-md border border-[#f58b78]/60 bg-gradient-to-b from-[#f1674f] to-[#9e3927] px-4 text-[0.9rem] text-white transition lg:h-[2.55rem] lg:px-[1.5rem] lg:text-[1.008rem]"
+          :class="
+            project.caseStudyUpdating
+              ? 'cursor-not-allowed opacity-60'
+              : 'hover:brightness-110'
+          "
         >
-          Case Study <AppIcon name="case" class="h-[1.05rem] w-[1.05rem]" />
-        </a>
+          <template v-if="project.caseStudyUpdating">
+            <span
+              class="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent motion-reduce:animate-none"
+            ></span>
+            Updating…
+          </template>
+          <template v-else>
+            Case Study
+            <AppIcon name="case" class="h-[1.05rem] w-[1.05rem]" />
+          </template>
+        </component>
+
         <ul class="ml-auto flex shrink-0 gap-2" aria-label="Tools used">
           <li
             v-for="icon in iconPaths"
