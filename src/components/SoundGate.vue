@@ -16,7 +16,7 @@ onBeforeUnmount(() => document.body.classList.remove("is-locked"));
 const enter = (withSound) => {
   if (withSound) play(); // must run inside the click so the browser allows audio
   leaving.value = true;
-  setTimeout(() => emit("enter"), 600);
+  setTimeout(() => emit("enter", withSound), 600);
 };
 </script>
 
