@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-// 👉 Paste your YouTube video ID here (the part after "v=" in the link)
+// 👉 YouTube video ID (the part after "v=" in the link)
 const VIDEO_ID = 'LhZ5GXCZtEw'
 
 const TARGET_VOLUME = 35 // 0–100
@@ -17,16 +17,20 @@ let resumeOnVisible = false
 
 const loadApi = () =>
   new Promise((resolve) => {
-    if (window.YT?.Player) return resolve()
+    if (window.YT?.Player) return resolve(true)
     const previous = window.onYouTubeIframeAPIReady
     window.onYouTubeIframeAPIReady = () => {
       previous?.()
-      resolve()
+      resolve(true)
     }
     if (!document.getElementById('yt-iframe-api')) {
       const tag = document.createElement('script')
       tag.id = 'yt-iframe-api'
       tag.src = 'https://www.youtube.com/iframe_api'
+      tag.onerror = () => {
+        tag.remove() // so a later attempt can try again
+        resolve(false)
+      }
       document.head.appendChild(tag)
     }
   })
@@ -55,7 +59,13 @@ const startPlayback = () => {
 const init = async () => {
   if (started) return
   started = true
-  await loadApi()
+
+  const apiLoaded = await loadApi()
+  if (!apiLoaded) {
+    started = false
+    error.value = true
+    return
+  }
 
   // Hidden, off-screen player
   const holder = document.createElement('div')
@@ -112,6 +122,11 @@ const init = async () => {
   })
 }
 
+// Start downloading the player without playing yet (call when the visitor shows intent to play)
+const preload = () => {
+  init()
+}
+
 const play = () => {
   init()
   wantPlay = true
@@ -128,7 +143,5 @@ const pause = (instant = false) => {
 
 const toggle = () => (playing.value ? pause() : play())
 
-export const useMusic = () => {
-  init() // start loading the player while the Enter screen is showing
-  return { playing, error, play, pause, toggle }
-}
+// Nothing loads here — YouTube is only requested once preload() or play() is called
+export const useMusic = () => ({ playing, error, preload, play, pause, toggle })

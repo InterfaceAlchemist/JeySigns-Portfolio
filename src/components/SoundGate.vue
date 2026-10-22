@@ -3,7 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useMusic } from "../composables/useMusic";
 
 const emit = defineEmits(["enter"]);
-const { play } = useMusic();
+const { play, preload } = useMusic();
 const leaving = ref(false);
 const enterBtn = ref(null);
 
@@ -50,6 +50,8 @@ const enter = (withSound) => {
         ref="enterBtn"
         type="button"
         class="mt-8 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] outline-none transition hover:!border-transparent hover:bg-brand focus-visible:border-white/50"
+        @pointerenter="preload"
+        @touchstart.passive="preload"
         @click="enter(true)"
       >
         Enter the portfolio <span aria-hidden="true">↗</span>
