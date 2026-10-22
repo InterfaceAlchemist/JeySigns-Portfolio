@@ -53,6 +53,13 @@ import { site } from "../data/site";
         >
           {{ site.name }}
         </h1>
+
+        <!-- new tagline -->
+        <p
+          class="mt=2 text-base font-bold sm:text-lg lg:mt-[0.9rem] lg:text-[1.2rem]"
+        >
+          creativity <span class="text-brand">meets</span> solution
+        </p>
       </div>
 
       <img
