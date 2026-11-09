@@ -7,7 +7,7 @@ const { playing, toggle } = useMusic();
 <template>
   <button
     type="button"
-    class="fixed bottom-4 right-4 z-[60] flex items-center gap-3 rounded-full border border-white/10 bg-ink/95 py-2.5 pl-3 pr-5 text-white shadow-xl backdrop-blur transition hover:scale-[1.03] sm:bottom-6 sm:right-6"
+    class="fixed bottom-4 right-4 z-[60] flex items-center gap-3 rounded-full border border-white/10 bg-ink/95 py-2.5 pl-3 pr-3 text-white shadow-xl backdrop-blur transition hover:scale-[1.03] sm:bottom-6 sm:right-6 sm:pr-5"
     :class="{ 'is-on': playing }"
     :aria-pressed="playing"
     :aria-label="playing ? 'Pause soundtrack' : 'Play soundtrack'"
@@ -28,7 +28,8 @@ const { playing, toggle } = useMusic();
       </span>
     </span>
 
-    <span class="text-left leading-tight">
+    <!-- Label: hidden on phones, shown from tablet size up -->
+    <span class="hidden text-left leading-tight sm:block">
       <span
         class="block text-[0.5rem] font-bold uppercase tracking-[0.25em] text-white/45"
       >
