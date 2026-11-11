@@ -67,9 +67,9 @@ export const posters = {
     [
       { image: 'images/graphic/poster-congrats.webp', ratio: '1 / 1', alt: 'CLAFRREDN logo contest congratulations post' },
       { image: 'images/graphic/poster-looking-for.webp', ratio: '1 / 1', alt: 'We are looking for — recruitment post' },
-      { image: 'images/graphic/poster-mspmc-1.webp', ratio: '109 / 155', alt: 'Ms. PMC 2026 poster 1' },
-      { image: 'images/graphic/hoh-tarpaulin.webp', ratio: '195 / 155', alt: 'Hands Of Hope A meal shared today poster' },
-      { image: 'images/graphic/poster-mspmc-2.webp', ratio: '109 / 155', alt: 'Ms. PMC 2026 poster' },
+      { image: 'images/graphic/poster-mspmc-1.webp', ratio: '109 / 155', alt: 'Ms. PMC 2026 poster' },
+      { image: 'images/graphic/poster-hoh-tarpaulin.webp', ratio: '195 / 155', alt: 'Hands Of Hope' },
+      { image: 'images/graphic/poster-mspmc-2.webp', ratio: '109 / 155', alt: 'Ms. PMC 2026 poster 2' },
       { image: 'images/graphic/poster-handa-ka-na-bang.webp', ratio: '1 / 1', alt: 'Handa ka na bang bumalik? poster' },
       { image: 'images/graphic/poster-cum-laude.webp', ratio: '1 / 1', alt: 'Officially Graduated — cum laude post' },
     ],
