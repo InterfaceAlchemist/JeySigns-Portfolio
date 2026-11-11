@@ -9,13 +9,47 @@ import { posters } from "../data/graphic";
 // How much page scrolling each poster takes, in screen heights. Smaller = flips faster.
 const SCROLL_PER_POSTER = 0.34;
 
+// Big title shown for each poster. Edit freely — the key is the image file name without ".webp".
+// (If you add a `title` to a poster in data/graphic.js, that wins over this list.)
+const TITLES = {
+  "poster-himeno": "Himeno",
+  "poster-bakugou": "Bakugou",
+  "poster-momo-ayase": "Momo Ayase",
+  "poster-gojo": "Satoru Gojo",
+  "poster-kirara-hoshi": "Kirara Hoshi",
+  "poster-pitou": "Neferpitou",
+  "poster-shibuya": "Shibuya Y2K",
+  "poster-vice-city": "Karina GTA",
+  "poster-slam-dunk": "Yujin SlamDunk",
+  "poster-liyo": "Liyo Film",
+  "poster-infographics": "Infographics",
+  "poster-el-fili": "El Fili Film",
+  "poster-no-stress": "No Stress",
+  "poster-just-be-yourself": "Just Be Yourself",
+  "poster-congrats": "Contest Winner",
+  "poster-looking-for": "PMC VECTORS",
+  "poster-mspmc-1": "Ms. PMC 2026",
+  "poster-hoh-tarpaulin": "Hands Of Hope",
+  "poster-mspmc-2": "Ms. PMC 2026 II",
+  "poster-handa-ka-na-bang": "BAK2SKUL",
+  "poster-cum-laude": "Graduation",
+};
+const stem = (path) =>
+  path
+    .split("/")
+    .pop()
+    .replace(/\.\w+$/, "");
+
 // Every poster that has an image (the "coming soon" placeholder is skipped).
-// Title above the poster: use `title` from the data if you add one, otherwise the alt text without "poster".
 const items = computed(() =>
   posters.rows
     .flat()
     .filter((p) => p.image)
-    .map((p) => ({ ...p, title: p.title || p.alt.replace(/\s+poster$/i, "") })),
+    .map((p) => ({
+      ...p,
+      title:
+        p.title || TITLES[stem(p.image)] || p.alt.replace(/\s+poster$/i, ""),
+    })),
 );
 const total = computed(() => items.value.length);
 const year = posters.meta.find((m) => m.label === "Year");
@@ -23,7 +57,7 @@ const types = posters.meta.find((m) => m.label === "Types");
 
 const wrapEl = ref(null);
 const stageEl = ref(null);
-const size = ref({ w: 280, h: 380, r: 500, step: 40, persp: 1100 });
+const size = ref({ w: 280, h: 380, r: 500, step: 40, persp: 1100, sw: 1000 });
 const pos = ref(0); // the position being drawn (eases towards `target`)
 let target = 0; // the position the scroll asks for
 const lightbox = ref(-1);
@@ -56,6 +90,7 @@ const measure = () => {
     r: w * (phone ? 1.7 : 1.8), // ring radius
     step: phone ? 34 : 40, // degrees between neighbouring posters
     persp: phone ? 900 : 1100, // camera distance: smaller = stronger 3D
+    sw: st.clientWidth,
   };
 };
 
@@ -115,6 +150,28 @@ const cardStyle = (i) => {
     transform: `rotateY(${phi}deg) translateZ(${size.value.r}px)`,
     backfaceVisibility: "hidden",
     filter: `brightness(${0.3 + 0.7 * facing})`,
+  };
+};
+
+// ---- big titles ----------------------------------------------------------
+// Size each title so it fits the screen (phones may use two lines).
+const titleLayout = (text) => {
+  const sw = size.value.sw;
+  const phone = sw < 640;
+  const maxPx = phone ? 50 : sw * 0.07;
+  const lines = phone && text.length > 12 ? 2 : 1;
+  const perLine = Math.ceil(text.length / lines);
+  return Math.min(maxPx, (sw * 0.9) / (perLine * 0.64));
+};
+// d = how far this poster is from the centre (negative = already passed → goes UP and fades,
+// positive = coming up from below)
+const titleStyle = (i) => {
+  const d = i - pos.value;
+  const fs = titleLayout(items.value[i].title);
+  return {
+    fontSize: `${fs}px`,
+    opacity: Math.max(0, 1 - Math.abs(d) * 2.2),
+    transform: `translate(-50%, calc(-50% + ${d * fs * 1.3}px))`,
   };
 };
 
@@ -188,10 +245,20 @@ onBeforeUnmount(() => {
       <div class="sticky top-0 flex h-[100svh] flex-col overflow-hidden">
         <!-- Top row (extra top space keeps it clear of the sticky nav bar) -->
         <div
-          class="wrap flex items-baseline justify-between pt-[4.25rem] lg:pt-[4.5rem]"
+          class="wrap grid grid-cols-2 items-baseline gap-y-3 pt-[4.25rem] lg:grid-cols-[1fr_auto_1fr] lg:pt-[4.5rem]"
         >
           <p class="text-sm lg:text-[1.1rem]">Selected Works</p>
-          <MetaItem v-if="year" :label="year.label" :value="year.value" />
+          <h3
+            class="order-last col-span-2 text-center text-[1.6rem] font-bold uppercase leading-none sm:text-[2rem] lg:order-none lg:col-span-1 lg:text-[2.2rem]"
+          >
+            Poster Design
+          </h3>
+          <MetaItem
+            v-if="year"
+            class="justify-self-end"
+            :label="year.label"
+            :value="year.value"
+          />
         </div>
 
         <!-- Stage -->
@@ -202,25 +269,6 @@ onBeforeUnmount(() => {
           @touchstart.passive="onTouchStart"
           @touchend.passive="onTouchEnd"
         >
-          <!-- Title of the current poster, above it -->
-          <div
-            class="pointer-events-none absolute left-1/2 z-[150] flex w-[min(92%,40rem)] -translate-x-1/2 justify-center"
-            :style="{ top: `calc(50% - ${size.h / 2}px - 3.1rem)` }"
-          >
-            <Transition name="poster-title" mode="out-in">
-              <p
-                :key="active"
-                class="text-center text-xs font-bold uppercase leading-snug tracking-wide sm:text-sm lg:text-[1rem]"
-              >
-                <span class="text-brand">{{
-                  String(active + 1).padStart(2, "0")
-                }}</span>
-                <span class="mx-2 text-white/40">/</span
-                >{{ items[active].title }}
-              </p>
-            </Transition>
-          </div>
-
           <!-- Posters on the ring -->
           <div class="absolute inset-0" :style="ringStyle">
             <template v-for="(p, i) in items" :key="p.image">
@@ -259,16 +307,22 @@ onBeforeUnmount(() => {
             </template>
           </div>
 
-          <!-- Big title in front of the posters -->
-          <h3
-            class="pointer-events-none absolute inset-0 z-[200] grid place-items-center text-center text-[clamp(2.8rem,17vw,4.6rem)] font-bold uppercase leading-[0.9] text-white [text-shadow:0_4px_32px_rgba(0,0,0,0.4)] lg:text-[6.3rem] lg:leading-none"
+          <!-- Big title of the current poster, in front of the ring.
+               Scrolling slides it up and fades it out while the next one rises into place. -->
+          <div
+            class="pointer-events-none absolute inset-0 z-[200]"
+            aria-hidden="true"
           >
-            <span>
-              <span class="block lg:inline">Poster</span>
-              <span class="hidden lg:inline">&nbsp;</span>
-              <span class="block lg:inline">Design</span>
-            </span>
-          </h3>
+            <template v-for="(p, i) in items" :key="p.image">
+              <p
+                v-if="Math.abs(i - pos) < 0.5"
+                class="absolute left-1/2 top-1/2 w-[92%] text-balance text-center font-bold uppercase leading-[1.02] text-white [text-shadow:0_4px_32px_rgba(0,0,0,0.45)]"
+                :style="titleStyle(i)"
+              >
+                {{ p.title }}
+              </p>
+            </template>
+          </div>
         </div>
 
         <!-- Controls -->
@@ -318,26 +372,3 @@ onBeforeUnmount(() => {
     />
   </section>
 </template>
-
-<style scoped>
-.poster-title-enter-active,
-.poster-title-leave-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-.poster-title-enter-from {
-  opacity: 0;
-  transform: translateY(0.6rem);
-}
-.poster-title-leave-to {
-  opacity: 0;
-  transform: translateY(-0.6rem);
-}
-@media (prefers-reduced-motion: reduce) {
-  .poster-title-enter-active,
-  .poster-title-leave-active {
-    transition: none;
-  }
-}
-</style>
