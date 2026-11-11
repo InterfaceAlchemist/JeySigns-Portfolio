@@ -1,8 +1,8 @@
 <script setup>
-import MarqueeBand from './ui/MarqueeBand.vue'
-import SocialShowcase from './SocialShowcase.vue'
-import PosterGallery from './PosterGallery.vue'
-import { argus, sugarCafe } from '../data/graphic'
+import MarqueeBand from "./ui/MarqueeBand.vue";
+import SocialShowcase from "./SocialShowcase.vue";
+import PosterCarousel from "./PosterCarousel.vue";
+import { argus, sugarCafe } from "../data/graphic";
 </script>
 
 <template>
@@ -17,6 +17,6 @@ import { argus, sugarCafe } from '../data/graphic'
     </section>
 
     <!-- Dark: posters -->
-    <PosterGallery />
+    <PosterCarousel />
   </div>
 </template>
